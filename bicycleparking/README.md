@@ -1,6 +1,6 @@
 # Analysis of bicycle parking in Vienna (Austria)
 
-Author: markus.straub.at@gmail.com
+by markus.straub.at@gmail.com, July 2015
 
 This repository holds some analysis of the situation for bicycle parking in Vienna, Austria and the according python scripts. Results are found in the files vienna_bicycleparking_anylsed.csv/png.
 
@@ -13,7 +13,7 @@ Note: a big station is defined as a station capable of holding >= 50 bicycles.
 
 ## Results
 
-![result diagrams](vienna_bicycleparking_anylsed.png)
+![result diagrams](vienna_bicycleparking_analysed.png)
 
 The **inner districts (1-9)** have on average better coverage with bicycle parking than the **outer districts** (10-23).
 
