@@ -3,9 +3,10 @@
 **Goal:** analyze the length of oneways in minor / residental roads
 (not) opened for cyclists. Compare results between districts.
 
-## OpenStreetMap
+We use data from [OpenStreetMap](https://www.openstreetmap.org) as well as open government data (OGD). All geospatial processing is done in [QGIS](https://qgis.org)
 
-### Data Acquisition
+
+## Data Acquisition
 
 1. Download [boundaries of Vienna's districts](https://www.data.gv.at/katalog/dataset/stadt-wien_bezirksgrenzenwien)
 
@@ -25,9 +26,10 @@ out;
 OSM_CONFIG_FILE=osmconf_custom.ini ogr2ogr -f GPKG output.gpkg input.osm.pbf
 ```
 
-The following steps are done in QGIS.
+4. Download the [OGD cycling infrastructure](https://www.data.gv.at/katalog/dataset/5e6175cd-dc44-4b32-a64a-1ac4239a6e4a) for Vienna.
 
-### Basic Preparations
+
+## Basic Preparations
 
 1. Load the district boundaries and `Reproject` to EPSG:31256
 2. Load the *lines* layer of the OSM file
@@ -37,7 +39,7 @@ The following steps are done in QGIS.
 6. Rename the field `BEZ` to `district`
 
 
-### Filter Minor Roads 
+## Filter Minor Roads 
 
 Filter small roads, but not too small so we don't include e.g. parking lots.
 We don't include living streets and pedestrian zones with the exception of *Begegnungszonen*.
@@ -47,7 +49,8 @@ We don't include living streets and pedestrian zones with the exception of *Bege
 "traffic_sign" LIKE 'AT:53.9e%' OR "traffic_sign" = 'AT:§53.9e'
 ```
 
-### Mark Roads With Parallel Cycleways
+
+## Mark Roads With Parallel Cycleways
 
 Oneway roads with a cycleway right next to it should not count as oneways.
 
@@ -68,7 +71,7 @@ Oneway roads with a cycleway right next to it should not count as oneways.
 5. `Merge vector layers` of the results of *clip* and *difference*
 
 
-### Determine Opened / Closed Oneways
+## Determine Opened / Closed Oneways
 
 Calculate these attributes using the `Field Calculator`.
 
@@ -104,11 +107,16 @@ else 'no_oneway'
 end
 ```
 
-### Manual fixes
+## Quality Assurance
 
-Now is the time to fix any errors for the `oneway_type` manually.
+For double-checking the completeness of OpenStreetMap data we use the cycle infrastructure OGD with the following layer source filter: `"SUBMERKMAL" = 'Radfahren gegen die Einbahn'`
 
-### Statistics
+Deviations between OSM and OGD are checked manually with the help of cyclists with local knowledge.
+
+Then any errors for `oneway_type` are fixed accordingly.
+
+
+## Statistics
 
 Calculate `Statistics by Categories` on the field `length_m` with the fields `district` and `oneway_type` as categories.
 
