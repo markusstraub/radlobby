@@ -2,6 +2,8 @@
 
 Goal: visualize accessibility / availability of bicycle parking
 
+![](bicycle_parking.png)
+
 ## Data Processing
 
 ### Data Acquisition
