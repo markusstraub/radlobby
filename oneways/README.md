@@ -126,38 +126,13 @@ else 'no_oneway'
 end
 ```
 
-### Separated Lanes Per Driving Direction
+### False Positives
 
-Manually set the `oneway_type` to `no_oneway` for roads with separated driving directions.
+Manually set the `oneway_type` to `no_oneway` for roads that are not really oneways:
+- roads with separated driving directions
+- link roads at junctions
 
-At least (parts of) these roads must be changed:
-
-- Edisonstraße
-- Freytaggasse
-- Ödenburger Straße
-- Berlagasse
-- Kürschnergasse
-- Oskar-Grissemann-Straße
-- Polletstraße
-- Weingartenallee
-- Tokiostraße
-- Sonnenallee
-- Meichlstraße
-- Unter der Kirche
-- Kolbegasse
-- Obere / Untere Aquäduktgasse / Wasserzeile
-- Schanzstraße
-- Akkonplatz
-- Elterleinplatz
-- Wohnparkstraße
-- Vorgartenstraße
-- Am Tabor
-- Gumplowiczstraße
-- Am Hauptbahnhof
-- Wittelsbachstraße
-- Esteplatz
-- Wintzingerodestraße
-
+Regarding separated driving directions: I tried to map all relevant roads with `dual_carriageway=yes` in 2024-11.
 
 ### Quality Assurance
 
@@ -204,7 +179,7 @@ Calculate `Statistics by Categories` on the field `length_m` with the fields `di
 ## Scheduled Improvements (for the next analysis)
 
 - don't count `junction=roundabout` as oneways
-- create a buffer for known areas with separated driving lanes (for reuse!)
+- don't count `dual_carriageway=yes` as oneways
 - directly use OGD instead of OSM?
   - pro: their quality since ~2020 is good enough (even more up to date than OSM)
   - con: comparability problems with our 2015 / 2020 / 2022 OSM-based analysis
