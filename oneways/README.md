@@ -36,10 +36,11 @@ For results see https://www.radlobby.at/wien/einbahnen
     out;
     ```
 
-3. Convert the OSM file to geopackage with `ogr2ogr`
+3. Roughly extract Vienna and convert the OSM file to geopackage with `ogr2ogr`
 
     ```bash
-    OSM_CONFIG_FILE=osmconf_custom.ini ogr2ogr -f GPKG output.gpkg input.osm.pbf
+    osmium extract -b 16.18,48.11,16.58,48.33 austria-latest.osm.pbf -o vienna-latest.osm.pbf
+    OSM_CONFIG_FILE=osmconf_custom.ini ogr2ogr -f GPKG vienna-latest.gpkg vienna-latest.osm.pbf
     ```
 
     The custom `.ini` makes sure that all relevant tags are kept.
@@ -51,7 +52,7 @@ For results see https://www.radlobby.at/wien/einbahnen
 
 ## Data Processing
 
-Use the QGIS Processing model.
+Use the QGIS Processing model `contraflow-cycling.model3`
 
 The model goes through all of these steps:
 
@@ -144,6 +145,6 @@ Calculate `Statistics by Categories` on the field `length_m` with the fields `di
 
 To double-check completeness and correctness of OpenStreetMap data we use the cycle infrastructure OGD with the following layer source filter: `"SUBMERKMAL" = 'Radfahren gegen die Einbahn'`
 
-Deviations between OSM and OGD are checked manually with the help of cyclists with local knowledge.
+Use the QGIS Processing model `contraflow-cycling-qa.model3` to detect potential errors.
 
-Then any errors for `oneway_type` are fixed accordingly.
+Deviations between OSM and OGD are then checked manually with the help of cyclists with local knowledge.
