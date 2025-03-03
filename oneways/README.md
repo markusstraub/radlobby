@@ -24,30 +24,34 @@ For results see https://www.radlobby.at/wien/einbahnen
 
 ## Data Acquisition
 
+### OpenStreetMap
+
 1. Download [boundaries of Vienna's districts](https://www.data.gv.at/katalog/dataset/stadt-wien_bezirksgrenzenwien) and add a new field `district` (e.g. copy the field `BEZ`)
 
-2. Download the OpenStreetMap road network from [one of these sources](https://planet.osm.org/) or as a fallback solution from [Overpass Turbo](https://overpass-turbo.eu):
+2. Download the OpenStreetMap road network.
+   - Fastest way: https://extract.bbbike.org/?sw_lng=16.18&sw_lat=48.11&ne_lng=16.58&ne_lat=48.333&format=osm.pbf
+   - Alternative: http://download.geofabrik.de/europe/austria.html
+   - Or check https://planet.osm.org/ for even more options.
 
-    ```
-    way
-    [highway]
-    ({{bbox}});
-    (._;>;);
-    out;
-    ```
-
-3. Roughly extract Vienna and convert the OSM file to geopackage with `ogr2ogr`
+3. Limit bounds to Vienna (when using a large extract)
 
     ```bash
     osmium extract -b 16.18,48.11,16.58,48.33 austria-latest.osm.pbf -o vienna-latest.osm.pbf
+    ```
+
+4. Convert the OSM file to geopackage with `ogr2ogr`
+
+    ```bash
     OSM_CONFIG_FILE=osmconf_custom.ini ogr2ogr -f GPKG vienna-latest.gpkg vienna-latest.osm.pbf
     ```
 
     The custom `.ini` makes sure that all relevant tags are kept.
 
-4. Download open government data for opened oneways - choose whatever was updated more recently (unfortunately updates seem to be irregular):
-   - [Radfahranlagen Wien](https://www.data.gv.at/katalog/dataset/5e6175cd-dc44-4b32-a64a-1ac4239a6e4a) (use the layer source filter `"SUBMERKMAL" = 'Radfahren gegen die Einbahn'`)
-   - [Radfahren gegen die Einbahn Wien](https://www.data.gv.at/katalog/dataset/radfahren-gegen-die-einbahn-wien)
+5. Download open government data for oneways and contraflow cycling
+   - [Einbahnen Wien](https://www.data.gv.at/katalog/de/dataset/stadt-wien_einbahnenwien)
+   - [Radfahranlagen Wien](https://www.data.gv.at/katalog/de/dataset/stadt-wien_radfahranlagenwien) (use the layer source filter `"SUBMERKMAL" = 'Radfahren gegen die Einbahn'`)
+     or [Radfahren gegen die Einbahn Wien](https://www.data.gv.at/katalog/dataset/radfahren-gegen-die-einbahn-wien),
+     choose whatever was updated more recently (unfortunately updates seem to be irregular):
 
 
 ## Data Processing
@@ -112,8 +116,8 @@ Calculate these attributes using the `Field Calculator`.
 
     ```
     case
-    when dual_carriageway='yes' then 'no_oneway'
-    when junction='roundabout' then 'no_oneway'
+    when dual_carriageway='yes' then 'no_real_oneway'
+    when junction='roundabout' then 'no_real_oneway'
     when oneway='yes' and (
             ("oneway_bicycle" is null or "oneway_bicycle" != 'no') and
             ("cycleway" is null or "cycleway" not like 'opposite%') and
@@ -148,3 +152,4 @@ To double-check completeness and correctness of OpenStreetMap data we use the cy
 Use the QGIS Processing model `contraflow-cycling-qa.model3` to detect potential errors.
 
 Deviations between OSM and OGD are then checked manually with the help of cyclists with local knowledge.
+
