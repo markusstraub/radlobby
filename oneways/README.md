@@ -18,7 +18,7 @@ For results see https://www.radlobby.at/wien/einbahnen
 - **Short parts of oneways next to cycleways count as opened:** our buffering of cycleways sligthly changes the statistics because oneways leading to/from a cycleway always count as opened for the first few meters. The total error should be negligible though.
 - **Access restrictions are not respected:** The analysis may contain roads where cycling / driving is forbidden (we don't yet take access restrictions into account). The number of roads where this is the case is very low.
 - **Note regarding the 2022 dataset:** Some residential roads around the new metro station Frankhplatz are used as detour and were tagged as major roads in OSM. We still included them in the analysis.
-- **Note regarding the 2025 dataset:** Vienna now provides good coverage of the `dual_carriageway` attribute (saving a lot of manual work to remove false positives)
+- **Note regarding the 2025 dataset:** Vienna now provides good coverage of the `dual_carriageway` attribute (saving a lot of manual work to remove false positives. These and roundabouts are mapped to `oneway_type=no_real_oneway` in the analysis)
 
 
 
@@ -29,8 +29,8 @@ For results see https://www.radlobby.at/wien/einbahnen
 1. Download [boundaries of Vienna's districts](https://www.data.gv.at/katalog/dataset/stadt-wien_bezirksgrenzenwien) and add a new field `district` (e.g. copy the field `BEZ`)
 
 2. Download the OpenStreetMap road network.
-   - Fastest way: https://extract.bbbike.org/?sw_lng=16.18&sw_lat=48.11&ne_lng=16.58&ne_lat=48.333&format=osm.pbf
-   - Alternative: http://download.geofabrik.de/europe/austria.html
+   - Smallest download, updated weekly: https://extract.bbbike.org/?sw_lng=16.18&sw_lat=48.11&ne_lng=16.58&ne_lat=48.333&format=osm.pbf
+   - Larger download, updated daily: http://download.geofabrik.de/europe/austria.html
    - Or check https://planet.osm.org/ for even more options.
 
 3. Limit bounds to Vienna (when using a large extract)
